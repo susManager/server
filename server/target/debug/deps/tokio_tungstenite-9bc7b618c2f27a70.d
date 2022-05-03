@@ -1,0 +1,11 @@
+/home/fridolin/dev/susManager/server/server/target/debug/deps/tokio_tungstenite-9bc7b618c2f27a70.rmeta: /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/lib.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/compat.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/connect.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/handshake.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/stream.rs
+
+/home/fridolin/dev/susManager/server/server/target/debug/deps/libtokio_tungstenite-9bc7b618c2f27a70.rlib: /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/lib.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/compat.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/connect.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/handshake.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/stream.rs
+
+/home/fridolin/dev/susManager/server/server/target/debug/deps/tokio_tungstenite-9bc7b618c2f27a70.d: /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/lib.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/compat.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/connect.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/handshake.rs /home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/stream.rs
+
+/home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/lib.rs:
+/home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/compat.rs:
+/home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/connect.rs:
+/home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/handshake.rs:
+/home/fridolin/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-tungstenite-0.15.0/src/stream.rs:

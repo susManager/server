@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/fridolin/dev/susManager/server/server/target/debug/build/typenum-d7dc1ec72e837014/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/fridolin/dev/susManager/server/server/target/debug/build/typenum-d7dc1ec72e837014/out/op.rs
