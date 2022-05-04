@@ -1,3 +1,5 @@
+mod todo_rest;
+
 #[macro_use]
 extern crate rocket;
 
@@ -11,21 +13,16 @@ fn hi() -> &'static str {
     "Hello there"
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, hi])
-        .mount("/brian", routes![hi])
-}
-
-#[get("/greet/<seconds>")]
-fn greeter() -> String {
-    format!("Hello, {}!", seconds)
+#[get("/greet/<name>")]
+fn greeter(name: String) -> String {
+    format!("Hello, {}!", name)
 }
 
 #[rocket::main]
 async fn main() {
     rocket::build()
         .mount("/", routes![index])
-        .mount("/hi", routes![hi])
+        .mount("/", routes![hi, greeter])
+        .launch()
         .await;
 }
