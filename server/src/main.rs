@@ -4,9 +4,8 @@ mod todo_rest;
 extern crate rocket;
 
 use rocket::State;
-use rusqlite::{Connection};
 use todo_rest::SQLWrapper;
-use std::sync::{Arc, Mutex};
+use std::sync::{Mutex};
 
 struct TestState {
     db: Mutex<SQLWrapper>,
@@ -18,26 +17,27 @@ fn index() -> &'static str {
 }
 
 #[get("/encrstate/<hash>")]
-fn greeter(hash: String, db: &State<TestState>) -> String {
+fn get_encrstate(hash: String, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    res.get_encr_state(hash).unwrap().name_hash
+    println!("{}", res.get_encrstate(hash.to_string()));
+    serde_json::to_string(&res.get_encrstate(hash)).unwrap() //TODO: fix escape characters being serialized
 }
 
-#[get("/state/<user>")]
-fn get_state (user: String) -> String {
-    user
+#[get("/state/<hash>")]
+fn get_data (hash: String) -> String {
+    hash
 }
 
 #[rocket::main]
 async fn main() {
     let db = TestState {db: Mutex::new(SQLWrapper {
-        conn: Connection::open_in_memory().unwrap()
+        conn: todo_rest::est_database_conn()
     })};
 
     rocket::build()
         .manage(db)
         .mount("/", routes![index])
-        .mount("/", routes![greeter])
+        .mount("/", routes![get_encrstate, get_data])
         .launch()
         .await;
 }
