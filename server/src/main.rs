@@ -19,8 +19,7 @@ fn index() -> &'static str {
 #[get("/encrstate/<hash>")]
 fn get_encrstate(hash: String, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    println!("{}", res.get_encrstate(hash.to_string()));
-    serde_json::to_string(&res.get_encrstate(hash)).unwrap() //TODO: fix escape characters being serialized
+    res.get_encrstate(hash)
 }
 
 #[get("/state/<hash>")]
