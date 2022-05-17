@@ -24,6 +24,7 @@ fn index() -> &'static str {
     "Hello from root"
 }
 
+//https://rocket.rs/v0.5-rc/guide/requests/#body-data
 #[post("/encrstate/<name_hash>", data = "<request>")]
 fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
     format!("{:?}", request.0.content)
