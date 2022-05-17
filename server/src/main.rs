@@ -4,6 +4,7 @@ mod todo_rest;
 extern crate rocket;
 
 use rocket::State;
+use rocket::serde::{Deserialize, json::Json};
 use todo_rest::SQLWrapper;
 use std::sync::{Mutex};
 
@@ -11,9 +12,21 @@ struct TestState {
     db: Mutex<SQLWrapper>,
 }
 
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct Request {
+    name_hash: String,
+    content: String
+}
+
 #[get("/")]
 fn index() -> &'static str {
     "Hello from root"
+}
+
+#[post("/encrstate/<name_hash>", data = "<request>")]
+fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
+    format!("{:?}", request.0.content)
 }
 
 #[get("/encrstate/<hash>")]
@@ -36,7 +49,7 @@ async fn main() {
     rocket::build()
         .manage(db)
         .mount("/", routes![index])
-        .mount("/", routes![get_encrstate, get_data])
+        .mount("/", routes![get_encrstate, get_data, post_encrstate])
         .launch()
         .await;
 }

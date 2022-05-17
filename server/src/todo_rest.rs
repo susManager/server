@@ -1,4 +1,3 @@
-use std::fmt::format;
 use rusqlite::{Connection, Result};
 use rocket::serde::{Serialize, Deserialize};
 
