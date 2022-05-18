@@ -51,25 +51,25 @@ impl SQLWrapper {
     }
 
     pub fn insert_encrstate(&self, name_hash: String, json: String) -> String {
-        let mut stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
+        let stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
             [name_hash, json]);
         if stmt.is_ok() { "ok"} else { "err" }.to_string()
     }
 
     pub fn insert_data(&self, name_hash: String, blob: String) -> String {
-        let mut stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
+        let stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
                                          [name_hash, blob]);
         if stmt.is_ok() { "ok"} else { "err" }.to_string()
     }
 }
 
-pub fn est_database_conn() -> Connection {
+pub fn est_database_conn() -> Result<Connection> {
     //TODO: this has to be a file, will be implemented later
-    let conn = Connection::open("./test-db.db3").expect("failed to establish connection..\n aborting..");
-    conn.execute("CREATE TABLE IF NOT EXISTS encrstate (name_hash TEXT PRIMARY KEY, json TEXT);", []);
-    conn.execute("INSERT into encrstate (name_hash, json) values (\"fridolin\", \"{allah}\");", []);
-    conn.execute("CREATE TABLE IF NOT EXISTS data (name_hash TEXT PRIMARY KEY, blob TEXT);", []);
-    conn.execute("INSERT into data (name_hash, blob) values (\"fridolin\", \"KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=\");", []);
+    let conn = Connection::open("./test-db.db3")?;
+    conn.execute("CREATE TABLE IF NOT EXISTS encrstate (name_hash TEXT PRIMARY KEY, json TEXT);", [])?;
+    conn.execute("INSERT into encrstate (name_hash, json) values (\"fridolin\", \"{allah}\");", [])?;
+    conn.execute("CREATE TABLE IF NOT EXISTS data (name_hash TEXT PRIMARY KEY, blob TEXT);", [])?;
+    conn.execute("INSERT into data (name_hash, blob) values (\"fridolin\", \"KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=\");", [])?;
     conn.flush_prepared_statement_cache();
-    conn
+    Ok(conn)
 }

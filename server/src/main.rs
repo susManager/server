@@ -38,7 +38,7 @@ fn get_encrstate(name_hash: String, db: &State<TestState>) -> String {
         Ok(a) => if a.is_empty() {
             "nothing found".to_string()
         } else { a }
-        Err(a) => "something went wrong".to_string()
+        Err(_a) => "something went wrong".to_string()
     }
 }
 
@@ -56,14 +56,14 @@ fn get_data (name_hash: String, db: &State<TestState>) -> String {
         Ok(a) => if a.is_empty() {
             "nothing found".to_string()
         } else { a }
-        Err(a) => "something went wrong".to_string()
+        Err(_a) => "something went wrong".to_string()
     }
 }
 
 #[rocket::main]
 async fn main() {
     let db = TestState {db: Mutex::new(SQLWrapper {
-        conn: todo_rest::est_database_conn()
+        conn: todo_rest::est_database_conn().expect("failed to establish connection")
     })};
 
     rocket::build()
@@ -72,5 +72,6 @@ async fn main() {
         .mount("/", routes![get_encrstate, get_data,
             post_encrstate, post_data])
         .launch()
-        .await;
+        .await.
+        expect("failed to start uwu");
 }
