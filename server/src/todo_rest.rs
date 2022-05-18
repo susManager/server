@@ -51,8 +51,14 @@ impl SQLWrapper {
     }
 
     pub fn insert_encrstate(&self, name_hash: String, json: String) -> String {
-        let stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
-            [name_hash, json]);
+        let stmt;
+        if self.get_encrstate(name_hash.clone()).unwrap().is_empty() {
+            stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
+                [name_hash, json]);
+        } else {
+            stmt = self.conn.execute("PDATE encrstate set json=?2 where name_hash=?1;",
+                 [name_hash, json]);
+        };
         if stmt.is_ok() { "ok"} else { "err" }.to_string()
     }
 
@@ -67,9 +73,9 @@ pub fn est_database_conn() -> Result<Connection> {
     //TODO: this has to be a file, will be implemented later
     let conn = Connection::open("./test-db.db3")?;
     conn.execute("CREATE TABLE IF NOT EXISTS encrstate (name_hash TEXT PRIMARY KEY, json TEXT);", [])?;
-    conn.execute("INSERT into encrstate (name_hash, json) values (\"fridolin\", \"{allah}\");", [])?;
+    //conn.execute("INSERT into encrstate (name_hash, json) values (\"fridolin\", \"{allah}\");", [])?;
     conn.execute("CREATE TABLE IF NOT EXISTS data (name_hash TEXT PRIMARY KEY, blob TEXT);", [])?;
-    conn.execute("INSERT into data (name_hash, blob) values (\"fridolin\", \"KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=\");", [])?;
+    //conn.execute("INSERT into data (name_hash, blob) values (\"fridolin\", \"KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=\");", [])?;
     conn.flush_prepared_statement_cache();
     Ok(conn)
 }

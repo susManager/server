@@ -73,6 +73,5 @@ async fn main() {
             get_encrstate, get_data,
             post_encrstate, post_data])
         .launch()
-        .await
-        .expect("failed to start uwu");
+        .await;
 }
