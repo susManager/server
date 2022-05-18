@@ -35,8 +35,8 @@ impl SQLWrapper {
         Ok(result)
     }
 
-    pub fn get_entry(&self, name_hash: String) -> Result<String> {
-        let mut stmt = self.conn.prepare(format!("SELECT  json from encrstate where name_hash == \"{}\"", name_hash).as_str()).unwrap();
+    pub fn get_data(&self, name_hash: String) -> Result<String> {
+        let mut stmt = self.conn.prepare(format!("SELECT  blob from data where name_hash == \"{}\"", name_hash).as_str()).unwrap();
         let mut result = "".to_string();
         let iter = stmt.query_map([], |row| {
             Ok(EncrState {
@@ -55,8 +55,9 @@ pub fn est_database_conn() -> Connection {
     //TODO: this has to be a file, will be implemented later
     let conn = Connection::open("./test-db.db3").expect("failed to establish connection..\n aborting..");
     conn.execute("CREATE TABLE IF NOT EXISTS encrstate (name_hash TEXT PRIMARY KEY, json TEXT);", []);
-    conn.execute("CREATE TABLE IF NOT EXISTS entry (name_hash TEXT PRIMARY KEY, blob TEXT);", []);
     conn.execute("INSERT into encrstate (name_hash, json) values (\"fridolin\", \"{allah}\");", []);
+    conn.execute("CREATE TABLE IF NOT EXISTS data (name_hash TEXT PRIMARY KEY, blob TEXT);", []);
+    conn.execute("INSERT into data (name_hash, blob) values (\"fridolin\", \"KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=\");", []);
     conn.flush_prepared_statement_cache();
     conn
 }

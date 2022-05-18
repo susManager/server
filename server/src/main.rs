@@ -30,10 +30,10 @@ fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestStat
     format!("{:?}", request.0.content)
 }
 
-#[get("/encrstate/<hash>")]
-fn get_encrstate(hash: String, db: &State<TestState>) -> String {
+#[get("/encrstate/<name_hash>")]
+fn get_encrstate(name_hash: String, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    let a = res.get_encrstate(hash);
+    let a = res.get_encrstate(name_hash);
     match a {
         Ok(a) => if a.is_empty() {
             "nothing found".to_string()
@@ -48,8 +48,15 @@ fn post_data(name_hash: String, request: Json<Request>, db: &State<TestState>) -
 }
 
 #[get("/data/<name_hash>")]
-fn get_data (name_hash: String) -> String {
-    name_hash
+fn get_data (name_hash: String, db: &State<TestState>) -> String {
+    let res = db.db.lock().unwrap();
+    let a = res.get_data(name_hash);
+    match a {
+        Ok(a) => if a.is_empty() {
+            "nothing found".to_string()
+        } else { a }
+        Err(a) => "something went wrong".to_string()
+    }
 }
 
 #[rocket::main]
