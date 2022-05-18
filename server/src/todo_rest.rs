@@ -56,16 +56,22 @@ impl SQLWrapper {
             stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
                 [name_hash, json]);
         } else {
-            stmt = self.conn.execute("PDATE encrstate set json=?2 where name_hash=?1;",
+            stmt = self.conn.execute("UPDATE encrstate set json = ?2 where name_hash=?1;",
                  [name_hash, json]);
         };
-        if stmt.is_ok() { "ok"} else { "err" }.to_string()
+        if stmt.is_ok() { "ok".to_string() } else { stmt.err().unwrap().to_string() }.to_string()
     }
 
     pub fn insert_data(&self, name_hash: String, blob: String) -> String {
-        let stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
-                                         [name_hash, blob]);
-        if stmt.is_ok() { "ok"} else { "err" }.to_string()
+        let stmt;
+        if self.get_encrstate(name_hash.clone()).unwrap().is_empty() {
+            stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
+                                     [name_hash, blob]);
+        } else {
+            stmt = self.conn.execute("UPDATE data set blob = ?2 where name_hash=?1;",
+                                     [name_hash, blob]);
+        };
+        if stmt.is_ok() { "ok".to_string() } else { stmt.err().unwrap().to_string() }.to_string()
     }
 }
 
