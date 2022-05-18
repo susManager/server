@@ -69,9 +69,10 @@ async fn main() {
     rocket::build()
         .manage(db)
         .mount("/", routes![index])
-        .mount("/", routes![get_encrstate, get_data,
+        .mount("/", routes![
+            get_encrstate, get_data,
             post_encrstate, post_data])
         .launch()
-        .await.
-        expect("failed to start uwu");
+        .await
+        .expect("failed to start uwu");
 }
