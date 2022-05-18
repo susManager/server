@@ -18,9 +18,24 @@ pub struct SQLWrapper {
 }
 
 impl SQLWrapper {
-    pub fn get_encrstate(&self, name_hash: String) -> String {
+    pub fn get_encrstate(&self, name_hash: String) -> Result<String> {
         //TODO: implement it lol
  //"{\"dc7b5396c805c06f0ac60390322e4142a0bceb35\": {\"iv\": [-103, 37, -19, -3, 47, -121, -31, 79, 1, 54, 94, 56, -107, 100, -87, 104],\"salt\" : [1, 3, 3, 7, 4, 2, 0, 6, 9],\"algo\": \"AES/CBC/PKCS5Padding\"}}".to_string()
+        let mut stmt = self.conn.prepare(format!("SELECT  json from encrstate where name_hash == \"{}\"", name_hash).as_str())?;
+        let mut result = "".to_string();
+        let iter = stmt.query_map([], |row| {
+            Ok(EncrState {
+                name_hash: name_hash.to_string(),
+                json: row.get(0)?
+            })
+        })?;
+        for r in iter {
+            result.push_str(r.unwrap().json.as_str());
+        }
+        Ok(result)
+    }
+
+    pub fn get_entry(&self, name_hash: String) -> Result<String> {
         let mut stmt = self.conn.prepare(format!("SELECT  json from encrstate where name_hash == \"{}\"", name_hash).as_str()).unwrap();
         let mut result = "".to_string();
         let iter = stmt.query_map([], |row| {
@@ -32,15 +47,7 @@ impl SQLWrapper {
         for r in iter {
             result.push_str(r.unwrap().json.as_str());
         }
-        result
-    }
-
-    pub fn get_entry(name_hash: String) -> Result<Entry> {
-        //TODO: same here, implement it!
-        Ok(Entry {
-            name_hash: "dc7b5396c805c06f0ac60390322e4142a0bceb35".to_owned(),
-            blob: "9KGKWgHfgLKQ0TnRFvxSJcqZp+xn+l3miVcRsRgHQf0=n".to_owned(),
-        })
+        Ok(result)
     }
 }
 

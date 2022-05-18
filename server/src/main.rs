@@ -33,12 +33,23 @@ fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestStat
 #[get("/encrstate/<hash>")]
 fn get_encrstate(hash: String, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    res.get_encrstate(hash)
+    let a = res.get_encrstate(hash);
+    match a {
+        Ok(a) => if a.is_empty() {
+            "nothing found".to_string()
+        } else { a }
+        Err(a) => "something went wrong".to_string()
+    }
 }
 
-#[get("/state/<hash>")]
-fn get_data (hash: String) -> String {
-    hash
+#[post("/data/<name_hash>", data = "<request>")]
+fn post_data(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
+    format!("{:?}", request.0.content)
+}
+
+#[get("/data/<name_hash>")]
+fn get_data (name_hash: String) -> String {
+    name_hash
 }
 
 #[rocket::main]
@@ -50,7 +61,8 @@ async fn main() {
     rocket::build()
         .manage(db)
         .mount("/", routes![index])
-        .mount("/", routes![get_encrstate, get_data, post_encrstate])
+        .mount("/", routes![get_encrstate, get_data,
+            post_encrstate, post_data])
         .launch()
         .await;
 }
