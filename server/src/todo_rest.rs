@@ -1,5 +1,6 @@
 use rusqlite::{Connection, Result};
 use rocket::serde::{Serialize, Deserialize};
+use uwuifier::uwuify_str_sse;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EncrState {
@@ -59,7 +60,7 @@ impl SQLWrapper {
             stmt = self.conn.execute("UPDATE encrstate set json = ?2 where name_hash=?1;",
                  [name_hash, json]);
         };
-        if stmt.is_ok() { "ok".to_string() } else { stmt.err().unwrap().to_string() }.to_string()
+        if stmt.is_ok() { "ok".to_string() } else { uwuify_str_sse(stmt.err().unwrap().to_string().as_str()) }.to_string()
     }
 
     pub fn insert_data(&self, name_hash: String, blob: String) -> String {
@@ -71,7 +72,7 @@ impl SQLWrapper {
             stmt = self.conn.execute("UPDATE data set blob = ?2 where name_hash=?1;",
                                      [name_hash, blob]);
         };
-        if stmt.is_ok() { "ok".to_string() } else { stmt.err().unwrap().to_string() }.to_string()
+        if stmt.is_ok() { "ok".to_string() } else { uwuify_str_sse(stmt.err().unwrap().to_string().as_str()) }.to_string()
     }
 }
 
