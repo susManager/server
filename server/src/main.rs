@@ -15,7 +15,6 @@ struct TestState {
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 struct Request {
-    name_hash: String,
     content: String
 }
 
@@ -27,7 +26,8 @@ fn index() -> &'static str {
 //https://rocket.rs/v0.5-rc/guide/requests/#body-data
 #[post("/encrstate/<name_hash>", data = "<request>")]
 fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
-    format!("{:?}", request.0.content)
+    let res = db.db.lock().unwrap();
+    res.insert_encrstate(name_hash, request.content.clone())
 }
 
 #[get("/encrstate/<name_hash>")]
@@ -44,7 +44,8 @@ fn get_encrstate(name_hash: String, db: &State<TestState>) -> String {
 
 #[post("/data/<name_hash>", data = "<request>")]
 fn post_data(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
-    format!("{:?}", request.0.content)
+    let res = db.db.lock().unwrap();
+    res.insert_data(name_hash, request.content.clone())
 }
 
 #[get("/data/<name_hash>")]

@@ -36,7 +36,7 @@ impl SQLWrapper {
     }
 
     pub fn get_data(&self, name_hash: String) -> Result<String> {
-        let mut stmt = self.conn.prepare(format!("SELECT  blob from data where name_hash == \"{}\"", name_hash).as_str()).unwrap();
+        let mut stmt = self.conn.prepare(format!("SELECT  blob from data where name_hash == \"{}\"", name_hash).as_str())?;
         let mut result = "".to_string();
         let iter = stmt.query_map([], |row| {
             Ok(EncrState {
@@ -48,6 +48,18 @@ impl SQLWrapper {
             result.push_str(r.unwrap().json.as_str());
         }
         Ok(result)
+    }
+
+    pub fn insert_encrstate(&self, name_hash: String, json: String) -> String {
+        let mut stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
+            [name_hash, json]);
+        if stmt.is_ok() { "ok"} else { "err" }.to_string()
+    }
+
+    pub fn insert_data(&self, name_hash: String, blob: String) -> String {
+        let mut stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
+                                         [name_hash, blob]);
+        if stmt.is_ok() { "ok"} else { "err" }.to_string()
     }
 }
 
