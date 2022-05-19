@@ -57,8 +57,7 @@ impl SQLWrapper {
             stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
                 [name_hash, json]);
         } else {
-            stmt = self.conn.execute("UPDATE encrstate set json = ?2 where name_hash=?1;",
-                 [name_hash, json]);
+            uwuify_str_sse("for this user is already an encrstate saved, please use another username")
         };
         if stmt.is_ok() { "ok".to_string() } else { uwuify_str_sse(stmt.err().unwrap().to_string().as_str()) }.to_string()
     }
