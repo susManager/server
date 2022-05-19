@@ -73,5 +73,6 @@ async fn main() {
             get_encrstate, get_data,
             post_encrstate, post_data])
         .launch()
-        .await;
+        .await
+        .unwrap();
 }

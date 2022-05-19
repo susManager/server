@@ -65,7 +65,7 @@ impl SQLWrapper {
 
     pub fn insert_data(&self, name_hash: String, blob: String) -> String {
         let stmt;
-        if self.get_encrstate(name_hash.clone()).unwrap().is_empty() {
+        if self.get_data(name_hash.clone()).unwrap().is_empty() {
             stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
                                      [name_hash, blob]);
         } else {
