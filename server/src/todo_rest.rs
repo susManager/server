@@ -52,26 +52,29 @@ impl SQLWrapper {
     }
 
     pub fn insert_encrstate(&self, name_hash: String, json: String) -> String {
-        let stmt;
+        let stmt =
         if self.get_encrstate(name_hash.clone()).unwrap().is_empty() {
-            stmt = self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
-                [name_hash, json]);
+            self.conn.execute("INSERT into encrstate (name_hash, json) values (?1, ?2);",
+                [name_hash, json])
         } else {
-            uwuify_str_sse("for this user is already an encrstate saved, please use another username")
+            return uwuify_str_sse("for this user is already an encrstate saved, please use another username");
         };
+        SQLWrapper::handle_stmt(stmt)
+    }
+
+    pub fn handle_stmt(stmt: Result<usize>) -> String {
         if stmt.is_ok() { "ok".to_string() } else { uwuify_str_sse(stmt.err().unwrap().to_string().as_str()) }.to_string()
     }
 
     pub fn insert_data(&self, name_hash: String, blob: String) -> String {
-        let stmt;
-        if self.get_data(name_hash.clone()).unwrap().is_empty() {
-            stmt = self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
-                                     [name_hash, blob]);
+        let stmt = if self.get_data(name_hash.clone()).unwrap().is_empty() {
+            self.conn.execute("INSERT into data (name_hash, blob) values (?1, ?2);",
+                                     [name_hash, blob])
         } else {
-            stmt = self.conn.execute("UPDATE data set blob = ?2 where name_hash=?1;",
-                                     [name_hash, blob]);
+            self.conn.execute("UPDATE data set blob = ?2 where name_hash=?1;",
+                                     [name_hash, blob])
         };
-        if stmt.is_ok() { "ok".to_string() } else { uwuify_str_sse(stmt.err().unwrap().to_string().as_str()) }.to_string()
+        SQLWrapper::handle_stmt(stmt)
     }
 }
 
