@@ -30,6 +30,15 @@ fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestStat
     res.insert_encrstate(name_hash, request.content.clone())
 }
 
+#[get("/exists/<name_hash>")]
+fn exists(name_hash: String, db: &State<TestState>) -> &'static str {
+    if db.db.lock().unwrap().exists(name_hash) {
+        "yes"
+    } else {
+        "no"
+    }
+}
+
 #[get("/encrstate/<name_hash>")]
 fn get_encrstate(name_hash: String, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
@@ -71,7 +80,8 @@ async fn main() {
         .mount("/", routes![index])
         .mount("/", routes![
             get_encrstate, get_data,
-            post_encrstate, post_data])
+            post_encrstate, post_data,
+            exists])
         .launch()
         .await
         .unwrap();

@@ -76,6 +76,10 @@ impl SQLWrapper {
         };
         SQLWrapper::handle_stmt(stmt)
     }
+
+    pub fn exists(&self, name_hash: String) -> bool{
+        !   self.get_encrstate(name_hash.clone()).unwrap().is_empty()
+    }
 }
 
 pub fn est_database_conn() -> Result<Connection> {
