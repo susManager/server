@@ -20,7 +20,7 @@ struct Request {
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello from root"
+    "Hello from root! susManager-Server has started successfully!"
 }
 
 //https://rocket.rs/v0.5-rc/guide/requests/#body-data
