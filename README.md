@@ -13,7 +13,7 @@ services:
     ports:
       - 6969:6969
 ```
-- Now spin up the container by executing ``sudo docker-compose -up -d``
+- Now spin up the container by executing ``sudo docker-compose up -d``
 - The service will now be accessible on port ``6969`` by default, if desired change the port settings like shown below:
 ```
  ports:
