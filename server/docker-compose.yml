@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  susManager-server:
+    container_name: susmanager-server
+    image: optinux/susmanager:latest
+    restart: unless-stopped
+    ports:
+      - 6969:6969
