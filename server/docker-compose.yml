@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  susManager-server:
+  susmanager-server:
     container_name: susmanager-server
     image: optinux/susmanager:latest
     restart: unless-stopped
