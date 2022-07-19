@@ -3,6 +3,7 @@ mod todo_rest;
 #[macro_use]
 extern crate rocket;
 
+use std::collections::LinkedList;
 use rocket::State;
 use rocket::serde::{Deserialize, json::Json};
 use todo_rest::SQLWrapper;
@@ -15,8 +16,11 @@ struct TestState {
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 struct Request {
-    content: String
+    content: String,
+    sign: String
 }
+
+fn decode(data: String) -> LinkedList<>
 
 #[get("/")]
 fn index() -> &'static str {
