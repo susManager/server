@@ -10,6 +10,8 @@ use rocket::serde::{Deserialize, json::Json};
 use todo_rest::SQLWrapper;
 use std::sync::{Mutex};
 
+use rsa::{PublicKey, RsaPrivateKey, RsaPublicKey, PaddingScheme};
+
 struct TestState {
     db: Mutex<SQLWrapper>,
 }
@@ -21,7 +23,7 @@ struct Request {
     sign: String
 }
 
-fn decode(data: String) -> Vec<u8> {
+fn decode(data: &String) -> Vec<u8> {
     let mut splitted = data.split("<>");
     let mut vec : Vec<u8> =  Vec::new();
     splitted.fold(vec, |&acc, s|
@@ -70,7 +72,8 @@ fn get_encrstate(name_hash: String, db: &State<TestState>) -> String {
 #[post("/data/<name_hash>", data = "<request>")]
 fn post_data(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    res.insert_data(name_hash, request.content.clone())
+    let data = decode(&request.content);
+    res.insert_data(name_hash, &request.content)
 }
 
 #[get("/data/<name_hash>")]
