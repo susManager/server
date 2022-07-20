@@ -4,6 +4,7 @@ mod todo_rest;
 extern crate rocket;
 
 use std::collections::LinkedList;
+use std::io::Bytes;
 use rocket::State;
 use rocket::serde::{Deserialize, json::Json};
 use todo_rest::SQLWrapper;
@@ -20,7 +21,18 @@ struct Request {
     sign: String
 }
 
-fn decode(data: String) -> LinkedList<>
+fn decode(data: String) -> Vec<u8> {
+    let mut splitted = data.split("<>");
+    let mut vec : Vec<u8> =  Vec::new();
+    splitted.fold(vec, |&acc, s|
+        acc.push(s_to_byte(s.to_string()))
+    )
+}
+
+fn s_to_byte(s: String) -> u8{
+    let i: u8 = s.parse().unwrap();
+    i
+}
 
 #[get("/")]
 fn index() -> &'static str {
@@ -31,7 +43,7 @@ fn index() -> &'static str {
 #[post("/encrstate/<name_hash>", data = "<request>")]
 fn post_encrstate(name_hash: String, request: Json<Request>, db: &State<TestState>) -> String {
     let res = db.db.lock().unwrap();
-    res.insert_encrstate(name_hash, request.content.clone())
+    res.insert_encrstate(name_hash, &request.content, &request.sign)
 }
 
 #[get("/exists/<name_hash>")]
